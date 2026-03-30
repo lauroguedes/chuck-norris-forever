@@ -1,0 +1,37 @@
+@import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", sans-serif;
+  --font-accent: "Instrument Serif", serif;
+}
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+  font-family: var(--font-sans);
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+a,
+img {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(245, 158, 11, 0.28);
+}
