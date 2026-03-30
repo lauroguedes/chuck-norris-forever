@@ -115,21 +115,21 @@ export default function App() {
                 <div className="relative flex items-center justify-center">
                   <Quote className="pointer-events-none absolute left-8 top-1/2 z-0 size-16 -translate-y-1/2 text-zinc-950/10 dark:text-white/10 sm:left-10 sm:size-20" />
                   <div className="max-w-md flex-1 text-center opacity-70">
-                  <AnimatePresence mode="wait">
-                    <motion.blockquote
-                      key={currentQuote}
-                      initial={{ opacity: 0, y: 18 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -18 }}
-                      transition={{ duration: 0.28, ease: "easeOut" }}
-                      className="relative z-10 px-8 text-balance text-2xl font-extralight leading-[1.12] tracking-[-0.05em] text-zinc-950 transition duration-200 group-hover:scale-[0.995] group-hover:blur-[1.5px] dark:text-zinc-200 sm:px-10 sm:text-3xl"
-                    >
-                      {renderQuoteWithAccent(currentQuote)}
-                    </motion.blockquote>
-                  </AnimatePresence>
-                </div>
+                    <AnimatePresence mode="wait">
+                      <motion.blockquote
+                        key={currentQuote}
+                        initial={{ opacity: 0, y: 18 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -18 }}
+                        transition={{ duration: 0.28, ease: "easeOut" }}
+                        className="relative z-10 px-8 text-balance text-2xl font-extralight leading-[1.12] tracking-[-0.05em] text-zinc-950 transition duration-200 dark:text-zinc-200 sm:px-10 sm:text-3xl sm:group-hover:scale-[0.995] sm:group-hover:blur-[1.5px]"
+                      >
+                        {renderQuoteWithAccent(currentQuote)}
+                      </motion.blockquote>
+                    </AnimatePresence>
+                  </div>
 
-                  <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center transition duration-200 sm:opacity-0 sm:translate-y-4 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 sm:group-focus-within:translate-y-0 sm:group-focus-within:opacity-100">
+                  <div className="pointer-events-none absolute inset-0 z-20 hidden items-center justify-center transition duration-200 sm:flex sm:opacity-0 sm:translate-y-4 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 sm:group-focus-within:translate-y-0 sm:group-focus-within:opacity-100">
                     <motion.div
                       initial={false}
                       className="pointer-events-auto relative z-20"
@@ -141,6 +141,14 @@ export default function App() {
                       />
                     </motion.div>
                   </div>
+                </div>
+
+                <div className="mt-5 flex justify-center sm:hidden">
+                  <QuoteActions
+                    onRandomQuote={handleRandomQuote}
+                    onCopyQuote={handleCopyQuote}
+                    copied={copyFeedback}
+                  />
                 </div>
               </div>
             </div>
