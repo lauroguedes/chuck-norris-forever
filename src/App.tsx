@@ -6,6 +6,7 @@ import { ThemeToggle } from "./components/theme-toggle";
 import { chuckImages, type ChuckImage } from "./data/images";
 import { quotes } from "./data/quotes";
 import { getRandomItem } from "./lib/utils";
+import { Analytics } from "@vercel/analytics/react";
 
 type Theme = "light" | "dark";
 
@@ -157,6 +158,7 @@ export default function App() {
           </a>
         </footer>
       </div>
+      <Analytics />
     </div>
   );
 }
