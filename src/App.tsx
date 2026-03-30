@@ -9,6 +9,7 @@ import { getRandomItem } from "./lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 
 type Theme = "light" | "dark";
+const QUOTE_SESSION_KEY = "chuck-norris-seen-quotes";
 
 function getInitialTheme(): Theme {
   const root = document.documentElement;
@@ -39,15 +40,52 @@ function renderQuoteWithAccent(quote: string) {
   });
 }
 
+function readSeenQuotes() {
+  try {
+    const rawValue = window.sessionStorage.getItem(QUOTE_SESSION_KEY);
+    if (!rawValue) {
+      return [];
+    }
+
+    const parsed = JSON.parse(rawValue);
+    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeSeenQuotes(seenQuotes: string[]) {
+  window.sessionStorage.setItem(QUOTE_SESSION_KEY, JSON.stringify(seenQuotes));
+}
+
+function pickSessionQuote(currentQuote?: string) {
+  const allQuotes: string[] = [...quotes];
+  const seenQuotes = readSeenQuotes().filter((quote) => allQuotes.includes(quote));
+  const availableQuotes = allQuotes.filter((quote) => !seenQuotes.includes(quote));
+
+  const pool = availableQuotes.length > 0 ? availableQuotes : allQuotes;
+  const randomPool = currentQuote && pool.length > 1 ? pool.filter((quote) => quote !== currentQuote) : pool;
+  const nextQuote = getRandomItem(randomPool.length > 0 ? randomPool : pool);
+
+  const nextSeenQuotes = availableQuotes.length > 0 ? [...seenQuotes, nextQuote] : [nextQuote];
+  writeSeenQuotes(nextSeenQuotes);
+
+  return nextQuote;
+}
+
 export default function App() {
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
-  const [currentQuote, setCurrentQuote] = useState(() => getRandomItem(quotes));
+  const [currentQuote, setCurrentQuote] = useState("");
   const [currentImage, setCurrentImage] = useState<ChuckImage>(() => getRandomItem(chuckImages));
   const [copyFeedback, setCopyFeedback] = useState(false);
 
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
+
+  useEffect(() => {
+    setCurrentQuote(pickSessionQuote());
+  }, []);
 
   useEffect(() => {
     if (!copyFeedback) {
@@ -59,7 +97,7 @@ export default function App() {
   }, [copyFeedback]);
 
   function handleRandomQuote() {
-    const nextQuote = getRandomItem(quotes);
+    const nextQuote = pickSessionQuote(currentQuote);
     setCurrentQuote(nextQuote);
   }
 
